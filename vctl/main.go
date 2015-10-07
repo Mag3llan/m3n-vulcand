@@ -1,21 +1,21 @@
 package main
 
 import (
-    "github.com/mailgun/log"
-	"github.com/mailgun/vulcand/vctl/command"
 	"github.com/mag3llan/m3n-vulcand/registry"
+	"github.com/mailgun/log"
+	"github.com/mailgun/vulcand/vctl/command"
 	"os"
 )
 
 var vulcanUrl string
 
 func main() {
-	log.Init([]*log.LogConfig{&log.LogConfig{Name: "console"}})
+	log.InitWithConfig(log.Config{Name: "console"})
 
-    r, err := registry.GetRegistry()
+	r, err := registry.GetRegistry()
 	if err != nil {
 		log.Errorf("Error: %s\n", err)
-        return
+		return
 	}
 	cmd := command.NewCommand(r)
 	if err := cmd.Run(os.Args); err != nil {

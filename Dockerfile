@@ -1,13 +1,10 @@
-FROM busybox:latest
+FROM busybox
 
-ADD https://github.com/upfluence/vulcand-auth/releases/download/v0.0.3/vulcand-linux-amd64 /vulcand
-
-RUN echo $GOPATH
-ADD . /go/src/m3n-vulcand/
-RUN ls $GOPATH
-RUN vbundle init --middleware=m3n-vulcand/auth
 EXPOSE 8181 8182
 
-RUN make install
+COPY vulcand-linux-amd64 /app/vulcand
+COPY ./vctl/vctl-linux-amd64 /app/vctl
+ENV PATH=/app:$PATH
 
-ENTRYPOINT ["/go/bin/vulcand"]
+ENTRYPOINT ["/app/vulcand"]
+CMD ["-etcd=http://127.0.0.1:4001", "-etcd=127.0.0.1:4002", "-etcd=127.0.0.1:4003", "-sealKey=1b727a055500edd9ab826840ce9428dc8bace1c04addc67bbac6b096e25ede4b"]
